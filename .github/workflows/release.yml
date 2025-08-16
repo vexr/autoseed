@@ -1,0 +1,78 @@
+name: Build and Release
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux (Ubuntu 24.04 LTS)
+          - os: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+            binary: autoseed
+          
+          # macOS 15 (Sequoia) - latest available with Apple Silicon support
+          - os: macos-15
+            target: aarch64-apple-darwin
+            binary: autoseed
+          
+          # Windows (explicitly using Windows Server 2022)
+          - os: windows-2022
+            target: x86_64-pc-windows-msvc
+            binary: autoseed.exe
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          target: ${{ matrix.target }}
+
+
+      - name: Build
+        run: |
+          cargo build --release --target ${{ matrix.target }}
+
+      - name: Strip binary (Linux and macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          strip target/${{ matrix.target }}/release/${{ matrix.binary }}
+
+      - name: Rename binary
+        run: |
+          cd target/${{ matrix.target }}/release
+          VERSION=${{ github.ref_name }}
+          VERSION=${VERSION#v}  # Remove 'v' prefix if present
+          case "${{ matrix.target }}" in
+            x86_64-unknown-linux-gnu)
+              cp autoseed ../../../autoseed-${VERSION}-linux-x86_64
+              ;;
+            aarch64-apple-darwin)
+              cp autoseed ../../../autoseed-${VERSION}-macos-arm64
+              ;;
+            x86_64-pc-windows-msvc)
+              cp autoseed.exe ../../../autoseed-${VERSION}-windows-x86_64.exe
+              ;;
+          esac
+        shell: bash
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            autoseed-*
+          token: ${{ secrets.RELEASE_TOKEN }}

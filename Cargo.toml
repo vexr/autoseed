@@ -1,0 +1,39 @@
+[package]
+name = "autoseed"
+version = "0.1.0"
+edition = "2024"
+description = "A high-performance vanity address generator for Substrate-based chains"
+license = "MIT"
+repository = "https://github.com/vexr/autoseed"
+keywords = ["autonomys", "ai3", "substrate", "vanity", "address", "generator", "crypto"]
+categories = ["cryptography", "command-line-utilities"]
+
+[[bin]]
+name = "autoseed"
+path = "src/main.rs"
+
+[dependencies]
+base64 = "0.22"
+clap = "4.5"
+colored = "3.0"
+crossbeam-channel = "0.5"
+ctrlc = "3.4"
+hex = "0.4"
+num-format = { version = "0.4", features = ["with-system-locale"] }
+num_cpus = "1.16"
+rpassword = "7.4"
+scrypt = "0.11"
+serde_json = "1.0"
+sha2 = "0.10"
+xsalsa20poly1305 = "0.9"
+zeroize = { version = "1.8", features = ["derive"] }
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["errhandlingapi", "winnls", "consoleapi", "handleapi", "processenv", "winbase", "wincon"] }
+
+[features]
+default = ["precomputed-tables", "std", "legacy_compatibility", "zeroize"]
+precomputed-tables = []
+std = []
+legacy_compatibility = []
+zeroize = []
