@@ -286,10 +286,10 @@ pub fn print_probability_breakdown(
     let pattern_len = pattern.chars().count();
     let locale = SystemLocale::default().unwrap();
     
-    println!("{}", colors::light_green("PROBABILITY CALCULATION"));
+    println!("{}", colors::yellow("PROBABILITY CALCULATION"));
 
     // Pattern Analysis
-    println!("\n{} '{}'", colors::white("→ Pattern Analysis:"), colors::light_green(pattern));
+    println!("\n{} '{}'", colors::yellow("→ Pattern Analysis:"), colors::bright_yellow(pattern));
     
     let mut calculations = Vec::new();
     let mut calc_string = String::new();
@@ -342,13 +342,13 @@ pub fn print_probability_breakdown(
     }
     
     // Base Calculation
-    println!("\n{}", colors::white("→ Base Calculation:"));
-    println!("{} = {}", calc_string, colors::light_green(&base_probability.to_formatted_string(&locale)));
+    println!("\n{}", colors::yellow("→ Base Calculation:"));
+    println!("{} = {}", calc_string, base_probability.to_formatted_string(&locale));
     
     if base_probability == 1 {
         println!("{}", colors::green("(Pattern matches network prefix or uses only wildcards - guaranteed match!)"));
     } else {
-        println!("(This is how many random addresses you'd need to check if there was only ONE position)");
+        println!("{}", colors::gray("(This is how many random addresses you'd need to check if there was only ONE position)"));
     }
     
     // Position Analysis
@@ -360,8 +360,8 @@ pub fn print_probability_breakdown(
         "Prefix Mode"
     };
     
-    println!("\n{}", colors::white(&format!("→ Position Analysis ({}):", mode_name)));
-    println!("Address structure: [49 total characters]");
+    println!("\n{}", colors::yellow(&format!("→ Position Analysis ({}):", mode_name)));
+    println!("{}", colors::gray("Address structure: [49 total characters]"));
     
     // Get the network prefix to check for locked positions
     let network_prefixes = if let Some(network) = crate::networks::find_network_by_prefix(ss58_prefix) {
@@ -476,11 +476,14 @@ pub fn print_probability_breakdown(
         };
         println!("   {}", colors::yellow(&prefix_info));
         
-        println!("\n  Where can \"{}\" ({} chars) fit in the last {} characters?", pattern, pattern_len, within);
+        println!("\n  {}\"{}\" {}", 
+                 colors::gray("Where can "), 
+                 colors::bright_yellow(pattern), 
+                 colors::gray(&format!("({} chars) fit in the last {} characters?", pattern_len, within)));
         
         // Show positions with their individual probabilities
         if !positions.is_empty() {
-            println!("\n  {}", colors::white("Per-Position Probability Analysis:"));
+            println!("\n  {}", colors::yellow("Per-Position Probability Analysis:"));
             
             // Check if position 0 is included (for prefix overlap detection)
             let has_position_zero = positions.contains(&0);
@@ -512,7 +515,7 @@ pub fn print_probability_breakdown(
                                  pos,
                                  display_prefix,
                                  ".".repeat(dots_before),
-                                 colors::yellow(pattern),
+                                 colors::bright_yellow(pattern),
                                  "-".repeat(dashes_after),
                                  prob.to_formatted_string(&locale));
                     }
@@ -521,7 +524,7 @@ pub fn print_probability_breakdown(
                              pos,
                              display_prefix,
                              ".".repeat(dots_before),
-                             colors::yellow(pattern),
+                             colors::bright_yellow(pattern),
                              "-".repeat(dashes_after),
                              prob.to_formatted_string(&locale));
                 }
@@ -535,7 +538,7 @@ pub fn print_probability_breakdown(
         
         // Show position probabilities for anywhere mode
         if !positions.is_empty() {
-            println!("\n  {}", colors::white("Per-Position Probability Analysis:"));
+            println!("\n  {}", colors::yellow("Per-Position Probability Analysis:"));
             
             let has_position_zero = positions.contains(&0);
             let pos0_prob = if has_position_zero {
@@ -580,7 +583,7 @@ pub fn print_probability_breakdown(
         
         // Show position probabilities for prefix mode
         if !positions.is_empty() {
-            println!("\n  {}", colors::white("Per-Position Probability Analysis:"));
+            println!("\n  {}", colors::yellow("Per-Position Probability Analysis:"));
             
             for (i, &pos) in positions.iter().enumerate() {
                 if i >= 5 && positions.len() > 6 {
@@ -611,7 +614,7 @@ pub fn print_probability_breakdown(
              colors::gray("Result:"), possible_positions);
     
     // Final Calculation
-    println!("\n{}", colors::white("→ FINAL CALCULATION:"));
+    println!("\n{}", colors::yellow("→ FINAL CALCULATION:"));
     println!("  {}", colors::gray("─────────────────────────"));
     
     let expected_attempts = if positions.is_empty() {
@@ -619,7 +622,7 @@ pub fn print_probability_breakdown(
         u64::MAX
     } else if positions.len() == 1 {
         let prob = calculate_probability_at_position(pattern, positions[0], case_sensitive, ss58_prefix);
-        println!("  Only 1 position available (position {})", positions[0]);
+        println!("  {}", colors::gray(&format!("Only 1 position available (position {})", positions[0])));
         prob
     } else {
         // Multiple positions - use harmonic mean
@@ -702,10 +705,10 @@ pub fn print_probability_breakdown(
         format!("{:.prec$}%", percentage, prec = decimal_places)
     };
     
-    println!("\n{} Expected {} attempts • {} ({})",
+    println!("\n{} Expected {} attempts · {} ({})",
              colors::yellow("→ SUMMARY:"),
-             colors::light_green(&format!("~{}", expected_attempts.to_formatted_string(&locale))),
-             colors::gray(&format!("1 in {}", expected_attempts.to_formatted_string(&locale))),
+             format!("~{}", expected_attempts.to_formatted_string(&locale)),
+             format!("1 in {}", expected_attempts.to_formatted_string(&locale)),
              percentage_str);
     
     println!();

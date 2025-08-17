@@ -68,10 +68,6 @@ pub mod colors {
         text.white().to_string()
     }
     
-    pub fn light_green(text: &str) -> String {
-        text.bright_green().to_string()
-    }
-    
 }
 
 /// Terminal control sequences
@@ -88,9 +84,6 @@ pub fn failed_indicator() -> String {
     colors::red("FAIL")
 }
 
-pub fn success_indicator() -> String {
-    colors::green("OK")
-}
 
 pub fn hide_cursor() {
     print!("{}", terminal_codes::HIDE_CURSOR);

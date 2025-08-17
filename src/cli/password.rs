@@ -1,4 +1,4 @@
-use crate::cli::terminal::{colors, terminal_codes, failed_indicator, success_indicator};
+use crate::cli::terminal::{colors, terminal_codes, failed_indicator};
 use std::io::{self, Write};
 use zeroize::Zeroize;
 
@@ -52,7 +52,7 @@ pub fn get_password_interactive() -> String {
             // Zeroize passwords before retry
             pwd1.zeroize();
             pwd2.zeroize();
-            print!("{} Passwords do not match. Please try again.", failed_indicator());
+            print!("{}", colors::red("Passwords do not match. Please try again."));
             io::stdout().flush().unwrap();
             std::thread::sleep(std::time::Duration::from_secs(2));
             print!("{}", terminal_codes::CR_CLEAR_LINE);
@@ -62,7 +62,7 @@ pub fn get_password_interactive() -> String {
         // Zeroize pwd2 as it's no longer needed
         pwd2.zeroize();
 
-        println!("{} Password confirmed.", success_indicator());
+        println!("Wallet encryption password verified.");
         println!(); // Add blank line after confirmation
         break pwd1;
     }

@@ -1,6 +1,6 @@
 [package]
 name = "autoseed"
-version = "0.1.0"
+version = "0.1.2"
 edition = "2024"
 description = "A high-performance vanity address generator for Substrate-based chains"
 license = "MIT"
