@@ -13,9 +13,9 @@ pub enum ValidationResult {
 impl ValidationResult {
     pub fn status_symbol(&self) -> &'static str {
         match self {
-            ValidationResult::Valid => "✔",
-            ValidationResult::Mismatch => "✗", 
-            ValidationResult::Error => "⚠",
+            ValidationResult::Valid => "OK",
+            ValidationResult::Mismatch => "X", 
+            ValidationResult::Error => "!",
         }
     }
 }

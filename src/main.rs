@@ -53,7 +53,7 @@ fn main() {
     
     // Clear screen and show header first
     clear_screen_completely(); // Clear scrollback + screen like Linux `clear` command
-    println!("{}", colors::blue(APP_HEADER));
+    println!("{}", colors::white(APP_HEADER));
 
     // Get password once if in hex mode
     let password = if config.hex_mode {

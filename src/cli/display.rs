@@ -31,7 +31,7 @@ pub fn process_individual_wallet(
     let validation_status = match validation_result {
         ValidationResult::Valid => format!("{} {} {} {}",
             colors::gray("Validated:"), colors::green(validation_result.status_symbol()),
-            colors::gray("Saved:"), colors::green("✔")),
+            colors::gray("Saved:"), colors::green("OK")),
         ValidationResult::Mismatch => format!("{} {}",
             colors::gray("Validated:"), colors::red(validation_result.status_symbol())),
         ValidationResult::Error => format!("{} {}",

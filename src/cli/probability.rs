@@ -286,10 +286,10 @@ pub fn print_probability_breakdown(
     let pattern_len = pattern.chars().count();
     let locale = SystemLocale::default().unwrap();
     
-    println!("{}", colors::cyan("PROBABILITY CALCULATION"));
+    println!("{}", colors::light_green("PROBABILITY CALCULATION"));
 
     // Pattern Analysis
-    println!("\n{} '{}'", colors::blue("→ Pattern Analysis:"), colors::bright_yellow(pattern));
+    println!("\n{} '{}'", colors::white("→ Pattern Analysis:"), colors::light_green(pattern));
     
     let mut calculations = Vec::new();
     let mut calc_string = String::new();
@@ -342,8 +342,8 @@ pub fn print_probability_breakdown(
     }
     
     // Base Calculation
-    println!("\n{}", colors::blue("→ Base Calculation:"));
-    println!("{} = {}", calc_string, colors::yellow(&base_probability.to_formatted_string(&locale)));
+    println!("\n{}", colors::white("→ Base Calculation:"));
+    println!("{} = {}", calc_string, colors::light_green(&base_probability.to_formatted_string(&locale)));
     
     if base_probability == 1 {
         println!("{}", colors::green("(Pattern matches network prefix or uses only wildcards - guaranteed match!)"));
@@ -360,7 +360,7 @@ pub fn print_probability_breakdown(
         "Prefix Mode"
     };
     
-    println!("\n{}", colors::blue(&format!("→ Position Analysis ({}):", mode_name)));
+    println!("\n{}", colors::white(&format!("→ Position Analysis ({}):", mode_name)));
     println!("Address structure: [49 total characters]");
     
     // Get the network prefix to check for locked positions
@@ -480,7 +480,7 @@ pub fn print_probability_breakdown(
         
         // Show positions with their individual probabilities
         if !positions.is_empty() {
-            println!("\n  {}", colors::blue("Per-Position Probability Analysis:"));
+            println!("\n  {}", colors::white("Per-Position Probability Analysis:"));
             
             // Check if position 0 is included (for prefix overlap detection)
             let has_position_zero = positions.contains(&0);
@@ -535,7 +535,7 @@ pub fn print_probability_breakdown(
         
         // Show position probabilities for anywhere mode
         if !positions.is_empty() {
-            println!("\n  {}", colors::blue("Per-Position Probability Analysis:"));
+            println!("\n  {}", colors::white("Per-Position Probability Analysis:"));
             
             let has_position_zero = positions.contains(&0);
             let pos0_prob = if has_position_zero {
@@ -580,7 +580,7 @@ pub fn print_probability_breakdown(
         
         // Show position probabilities for prefix mode
         if !positions.is_empty() {
-            println!("\n  {}", colors::blue("Per-Position Probability Analysis:"));
+            println!("\n  {}", colors::white("Per-Position Probability Analysis:"));
             
             for (i, &pos) in positions.iter().enumerate() {
                 if i >= 5 && positions.len() > 6 {
@@ -611,7 +611,7 @@ pub fn print_probability_breakdown(
              colors::gray("Result:"), possible_positions);
     
     // Final Calculation
-    println!("\n{}", colors::blue("→ FINAL CALCULATION:"));
+    println!("\n{}", colors::white("→ FINAL CALCULATION:"));
     println!("  {}", colors::gray("─────────────────────────"));
     
     let expected_attempts = if positions.is_empty() {
@@ -704,7 +704,7 @@ pub fn print_probability_breakdown(
     
     println!("\n{} Expected {} attempts • {} ({})",
              colors::yellow("→ SUMMARY:"),
-             colors::bright_yellow(&format!("~{}", expected_attempts.to_formatted_string(&locale))),
+             colors::light_green(&format!("~{}", expected_attempts.to_formatted_string(&locale))),
              colors::gray(&format!("1 in {}", expected_attempts.to_formatted_string(&locale))),
              percentage_str);
     

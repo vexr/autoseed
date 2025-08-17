@@ -52,14 +52,6 @@ pub mod colors {
         text.yellow().to_string()
     }
     
-    pub fn blue(text: &str) -> String {
-        text.blue().to_string()
-    }
-    
-    pub fn cyan(text: &str) -> String {
-        text.cyan().to_string()
-    }
-    
     pub fn gray(text: &str) -> String {
         text.bright_black().to_string()
     }
@@ -70,6 +62,14 @@ pub mod colors {
     
     pub fn orange(text: &str) -> String {
         text.truecolor(255, 165, 0).to_string()
+    }
+    
+    pub fn white(text: &str) -> String {
+        text.white().to_string()
+    }
+    
+    pub fn light_green(text: &str) -> String {
+        text.bright_green().to_string()
     }
     
 }
@@ -85,11 +85,11 @@ pub mod terminal_codes {
 
 /// Helper functions for formatted indicators
 pub fn failed_indicator() -> String {
-    colors::red("✗")
+    colors::red("FAIL")
 }
 
 pub fn success_indicator() -> String {
-    colors::green("✔")
+    colors::green("OK")
 }
 
 pub fn hide_cursor() {
@@ -276,14 +276,12 @@ pub fn print_progress(
     // Build progress string - ALWAYS show full progress info during search
     let locale = SystemLocale::default().unwrap();
     let mut progress = format!(
-        "\r{}{} {} {} · {} {} keys/s {} · {} {}",
+        "\r{}{} {} · {} {} keys/s · {} {}",
         terminal_codes::CLEAR_LINE,
         colors::gray("Attempts:"),
         total_attempts.to_formatted_string(&locale),
-        colors::gray("·"),
         colors::gray("Speed:"),
         keys_per_second.to_formatted_string(&locale),
-        colors::gray("·"),
         colors::gray("Runtime:"),
         time_str
     );
@@ -293,8 +291,7 @@ pub fn print_progress(
         use std::fmt::Write;
         let _ = write!(
             progress,
-            " {} {} {found_count}/{count}",
-            colors::gray("·"),
+            " · {} {found_count}/{count}",
             colors::gray("Progress:")
         );
     }
@@ -304,8 +301,7 @@ pub fn print_progress(
         use std::fmt::Write;
         let _ = write!(
             progress, 
-            " {} {} {eta_str}",
-            colors::gray("·"),
+            " · {} {eta_str}",
             colors::gray("ETA:")
         );
     }
@@ -318,8 +314,7 @@ pub fn print_progress(
         let colored_luck = get_luck_color(luck_val, &luck_text);
         let _ = write!(
             progress,
-            " {} {} {}",
-            colors::gray("·"),
+            " · {} {}",
             colors::gray("Luck:"),
             colored_luck
         );
@@ -347,7 +342,7 @@ pub fn print_result(result: &VanityResult, hex_mode: bool, wallet_number: usize,
         address.clone()
     };
 
-    println!("{} Address {}: {}", colors::blue("•"), wallet_number, highlighted_address);
+    println!("{} Address {}: {}", colors::white("•"), wallet_number, highlighted_address);
 
     let secret_label = if hex_mode { "Private Key" } else { "Mnemonic" };
     println!("  {} {}: {}", colors::gray("└"), secret_label, result.secret);
